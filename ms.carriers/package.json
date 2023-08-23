@@ -2,7 +2,7 @@
   "name": "ms.carriers",
   "version": "1.0.0",
   "description": "MS Carriers",
-  "main": "./src/server.js",
+  "main": "./dist/src/server.js",
   "scripts": {
     "build": "npx tsc",
     "start:dev": "npx ts-node-dev ./src/server.ts",
