@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  ms-tracking-manager:
+    ms-loggi:
+    build:
+      context: ./ms.loggi
+      dockerfile: Dockerfile
+    image: ms-loggi
+    ports:
+      - "4000:4000"
+
+  ms-carriers:
+    build:
+      context: ./ms.carriers
+      dockerfile: Dockerfile
+    image: ms-carriers
+    ports:
+      - "4001:4001"
+
+  ms-loggi:
+    build:
+      context: ./ms.loggi
+      dockerfile: Dockerfile
+    image: ms-loggi
+    ports:
+      - "4002:4002"
+
+  web-tracking-view:
+    build:
+      context: ./ms.loggi
+      dockerfile: Dockerfile
+    image: ms-loggi
+    ports:
+      - "4003:4003"
+
+  # Adicionar Kafka
+
+  # Adicionar postgres
+
+  # Adicionar PG Adimin
+
+  # Adicionar o APM
