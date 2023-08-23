@@ -2,8 +2,6 @@
 
 ## ms.carriers
 
-## ms.loggi
-
 ## ms.tracking-manager
 
 ## ms.tracking-view
