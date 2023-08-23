@@ -2,10 +2,11 @@
   "name": "ms.carriers",
   "version": "1.0.0",
   "description": "MS Carriers",
-  "main": "./src/index.js",
+  "main": "./src/server.js",
   "scripts": {
-    "start:prod": "npx tsc && node ./src/index.js",
-    "start:dev": "npx ts-node-dev ./src/index.ts",
+    "build": "npx tsc",
+    "start:prod": "npx tsc && node ./src/server.js",
+    "start:dev": "npx ts-node-dev ./src/server.ts",
     "test": "npx jest --coverage"
   },
   "keywords": [],

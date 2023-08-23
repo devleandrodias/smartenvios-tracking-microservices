@@ -1,1 +1,4 @@
-export interface IUpdateTrackingEventInput {}
+export interface IUpdateTrackingEventInput {
+  trackingCode: string;
+  shippingCompany: string;
+}

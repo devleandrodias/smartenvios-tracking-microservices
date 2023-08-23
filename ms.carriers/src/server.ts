@@ -7,7 +7,11 @@ import { UpdateTrackingEventUseCase } from "./modules/tracking/useCase/updateTra
 const app = express();
 
 app.get("/", async (_, res) => {
-  new UpdateTrackingEventUseCase().execute();
+  await new UpdateTrackingEventUseCase().execute({
+    trackingCode: "SM82886187440BM",
+    shippingCompany: "carriers",
+  });
+
   return res.status(200).send();
 });
 
