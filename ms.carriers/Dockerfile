@@ -1,7 +1,7 @@
 FROM node:18
 
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /usr/app/ms-carriers
 
 # Copy package.json and package-lock.json to the container
 COPY package*.json ./
@@ -13,7 +13,7 @@ RUN npm install
 COPY . .
 
 # Expose the port your application will run on
-EXPOSE 3000
+EXPOSE 4001
 
 # Define the command to run your application
-CMD [ "node", "app.js" ]  # Substitua "app.js" pelo nome do seu arquivo principal
+CMD [ "npm", "run", "start:prod" ]

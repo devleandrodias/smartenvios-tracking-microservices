@@ -1,14 +1,13 @@
 version: "3"
 
 services:
-  ms-tracking-manager:
-    ms-loggi:
-    build:
-      context: ./ms.loggi
-      dockerfile: Dockerfile
-    image: ms-loggi
-    ports:
-      - "4000:4000"
+  # ms-tracking-manager:
+  #   build:
+  #     context: ./ms.loggi
+  #     dockerfile: Dockerfile
+  #   image: ms-tracking-manager
+  #   ports:
+  #     - "4000:4000"
 
   ms-carriers:
     build:
@@ -17,22 +16,16 @@ services:
     image: ms-carriers
     ports:
       - "4001:4001"
+    networks:
+      - smartnetwork
 
-  ms-loggi:
-    build:
-      context: ./ms.loggi
-      dockerfile: Dockerfile
-    image: ms-loggi
-    ports:
-      - "4002:4002"
-
-  web-tracking-view:
-    build:
-      context: ./ms.loggi
-      dockerfile: Dockerfile
-    image: ms-loggi
-    ports:
-      - "4003:4003"
+  # web-tracking-view:
+  #   build:
+  #     context: ./web.tracking-view
+  #     dockerfile: Dockerfile
+  #   image: web-tracking-view
+  #   ports:
+  #     - "4002:4002"
 
   # Adicionar Kafka
 
@@ -41,3 +34,7 @@ services:
   # Adicionar PG Adimin
 
   # Adicionar o APM
+
+networks:
+  smartnetwork:
+    driver: bridge
