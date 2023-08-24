@@ -23,13 +23,18 @@ services:
     networks:
       - smartnetwork
 
-  # web-tracking-view:
-  #   build:
-  #     context: ./web.tracking-view
-  #     dockerfile: Dockerfile
-  #   image: web-tracking-view
-  #   ports:
-  #     - "4002:4002"
+  web-tracking-view:
+    image: web-tracking-view
+    container_name: web-tracking-view
+    build:
+      context: ./web.tracking-view
+      dockerfile: Dockerfile
+    ports:
+      - "4002:4002"
+    networks:
+      - smartnetwork
+    depends_on:
+      - ms-tracking-manager
 
   # Adicionar Kafka
 
