@@ -3,5 +3,7 @@
 */coverage
 */dist
 
+elasticsearch_data
+
 # Files
 .env
