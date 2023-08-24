@@ -1,5 +1,9 @@
+import "dotenv/config";
+import "elastic-apm-node/start.js";
+
 import colors from "colors";
 import express from "express";
+
 import { envs } from "./config/env.config";
 
 const app = express();

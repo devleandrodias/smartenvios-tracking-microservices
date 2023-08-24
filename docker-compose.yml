@@ -11,6 +11,10 @@ services:
       - "4000:4000"
     networks:
       - smartnetwork
+    volumes:
+      - ./ms.tracking-manager:/usr/app/ms-tracking-manager
+    depends_on:
+      - apm
 
   ms-carriers:
     image: ms-carriers
@@ -22,6 +26,10 @@ services:
       - "4001:4001"
     networks:
       - smartnetwork
+    volumes:
+      - ./ms.carriers:/usr/app/ms-carriers
+    depends_on:
+      - apm
 
   web-tracking-view:
     image: web-tracking-view
@@ -33,6 +41,8 @@ services:
       - "4002:4002"
     networks:
       - smartnetwork
+    volumes:
+      - ./web.tracking-view:/usr/app/web-tracking-view
     depends_on:
       - ms-tracking-manager
 
@@ -120,6 +130,8 @@ services:
       ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
     networks:
       - smartnetwork
+    depends_on:
+      - elasticsearch
 
   apm:
     image: docker.elastic.co/apm/apm-server-oss:7.13.0
@@ -129,6 +141,8 @@ services:
     ports:
       - "8200:8200"
     restart: on-failure
+    depends_on:
+      - kibana
     networks:
       - smartnetwork
 

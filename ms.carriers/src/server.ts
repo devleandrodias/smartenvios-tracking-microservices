@@ -1,3 +1,6 @@
+import "dotenv/config";
+import "elastic-apm-node/start";
+
 import colors from "colors";
 import express from "express";
 
@@ -6,7 +9,9 @@ import { UpdateTrackingEventUseCase } from "./modules/tracking/useCase/updateTra
 
 const app = express();
 
-app.get("/", async (_, res) => {
+app.get("/", (_, res) => res.json({ ok: "Carriers Docker" }));
+
+app.get("/tracking", async (_, res) => {
   await new UpdateTrackingEventUseCase().execute({
     trackingCode: "SM82886187440BM",
     shippingCompany: "carriers",
