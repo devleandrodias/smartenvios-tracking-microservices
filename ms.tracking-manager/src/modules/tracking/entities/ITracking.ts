@@ -8,8 +8,9 @@ export enum ESmartEnviosStatus {
 }
 
 export type ITrackingEvent = {
-  status: ESmartEnviosStatus;
   observation: string;
+  tracking: ITracking;
+  status: ESmartEnviosStatus;
 };
 
 export interface ITracking {

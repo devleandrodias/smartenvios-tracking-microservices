@@ -1,8 +1,8 @@
 import { Message } from "kafkajs";
 import { SchemaType } from "@kafkajs/confluent-schema-registry";
 
-import { registry } from "../../../../lib/schemaRegistry";
-import { EKafkaTopics, producer } from "../../../../lib/kafka";
+import { registry } from "../../../../lib/kafka/schemaRegistry";
+import { EKafkaTopics, producer } from "../../../../lib/kafka/kafka";
 import { TicketCreatedSchema } from "../../../../types/KafkaMessageSchemas";
 
 interface IGenerateTicketInput {

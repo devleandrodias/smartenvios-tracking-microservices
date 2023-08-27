@@ -1,5 +1,6 @@
-import { registry } from "../../../../lib/schemaRegistry";
-import { EKafkaTopics, consumer, kafka } from "../../../../lib/kafka";
+import { registry } from "../../../../lib/kafka/schemaRegistry";
+import { EKafkaTopics, consumer, kafka } from "../../../../lib/kafka/kafka";
+import { CreateOrderTrackingUseCase } from "./createOrderTracking.useCase";
 
 export class CreateOrderTrackingConsumer {
   async consume() {
@@ -17,7 +18,15 @@ export class CreateOrderTrackingConsumer {
           value: await registry.decode(message.value as Buffer),
         };
 
-        console.log("DECODED", decodedMessage.value);
+        const { orderId, shippingCompany, trackingCode } = decodedMessage.value;
+
+        console.log({ orderId, shippingCompany, trackingCode });
+
+        await new CreateOrderTrackingUseCase().execute({
+          orderId,
+          trackingCode,
+          shippingCompany,
+        });
       },
     });
   }

@@ -7,6 +7,6 @@ export class GetTrackingCodeController {
       trackingCode: req.params.trackingCode,
     });
 
-    return res.send(result);
+    return res.json(result);
   }
 }

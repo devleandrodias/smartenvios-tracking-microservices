@@ -111,6 +111,7 @@ services:
     image: postgres
     container_name: postgres
     environment:
+      POSTGRES_DB: "smartenvios"
       POSTGRES_PASSWORD: "PostgresSmartEnvios!"
     ports:
       - "5432:5432"

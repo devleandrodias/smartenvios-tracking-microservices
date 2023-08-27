@@ -1,7 +1,13 @@
 import { ITracking } from "../entities/ITracking";
 
+export interface ISaveOrderTrackingInput {
+  orderId: string;
+  trackingCode: string;
+  shippingCompany: string;
+}
+
 export interface ITrackingRepository {
-  saveOrderTracking(): Promise<void>;
   addTrackingEvent(): Promise<ITracking>;
-  getTrackingByCode(trackingCode: string): Promise<ITracking | undefined>;
+  saveOrderTracking(input: ISaveOrderTrackingInput): Promise<ITracking>;
+  getTrackingByCode(trackingCode: string): Promise<ITracking | null>;
 }
