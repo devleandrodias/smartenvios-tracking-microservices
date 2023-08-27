@@ -25,7 +25,7 @@ export class UpdateTrackingEventUseCase {
     });
 
     const events: ITrackingEvent[] = tracking.Eventos.map((evento) => ({
-      observation: evento.Descricao,
+      description: evento.Descricao,
       status: evento.Status as ESmartEnviosStatus,
     }));
 
