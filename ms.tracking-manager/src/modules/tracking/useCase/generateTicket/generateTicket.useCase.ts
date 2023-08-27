@@ -3,16 +3,11 @@ import { SchemaType } from "@kafkajs/confluent-schema-registry";
 
 import { registry } from "../../../../lib/kafka/schemaRegistry";
 import { EKafkaTopics, producer } from "../../../../lib/kafka/kafka";
+import { IGenerateTicketInput } from "./generateTicket.interfaces";
 import { TicketCreatedSchema } from "../../../../types/KafkaMessageSchemas";
 
-interface IGenerateTicketInput {
-  orderId: string;
-  trackingCode: string;
-  shippingCompany: string;
-}
-
 export class GenerateTicketUseCase {
-  async execute(input: IGenerateTicketInput) {
+  async execute(input: IGenerateTicketInput): Promise<void> {
     const schema = `
     {
       "type": "record",

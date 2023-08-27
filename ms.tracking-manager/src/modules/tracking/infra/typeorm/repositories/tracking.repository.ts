@@ -1,11 +1,13 @@
 import { Repository } from "typeorm";
-import { ITracking } from "../../../entities/ITracking";
-import {
-  ISaveOrderTrackingInput,
-  ITrackingRepository,
-} from "../../../repositories/ITrackingRepository";
+
 import { Tracking } from "../entities/Tracking";
+import { ITracking } from "../../../entities/ITracking";
 import { AppDataSource } from "../../../../../lib/typeorm/data-source";
+
+import {
+  ITrackingRepository,
+  ISaveOrderTrackingInput,
+} from "../../../repositories/ITrackingRepository";
 
 export class TrackingRepository implements ITrackingRepository {
   private repository: Repository<Tracking>;
@@ -31,6 +33,9 @@ export class TrackingRepository implements ITrackingRepository {
   }
 
   async getTrackingByCode(trackingCode: string): Promise<ITracking | null> {
-    return this.repository.findOne({ where: { trackingCode } });
+    return this.repository.findOne({
+      where: { trackingCode },
+      relations: ["events"],
+    });
   }
 }

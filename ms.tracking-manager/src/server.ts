@@ -11,24 +11,17 @@ import { AppDataSource } from "./lib/typeorm/data-source";
 import { KafkaConsumer } from "./lib/kafka/kafkaConsumer";
 
 import { GenerateTicketUseCase } from "./modules/tracking/useCase/generateTicket/generateTicket.useCase";
-import { GetTrackingCodeController } from "./modules/tracking/useCase/getTracking/getTracking.controller";
+import { GetTrackingByCodeController } from "./modules/tracking/useCase/getTrackingByCode/getTrackingByCode.controller";
 import { UpdateTrackingEventUseCase } from "./modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.useCase";
+import { GenerateTicketController } from "./modules/tracking/useCase/generateTicket/generateTicket.controller";
 
 const app = express();
 
-app.get("/tracking/:trackingCode", new GetTrackingCodeController().handle);
+app.use(express.json());
 
-// ! Rota utilizada apenas para publicar mensagem que uma etiqueta foi gerada
+app.get("/:trackingCode", new GetTrackingByCodeController().handle);
 
-app.get("/generate-ticket", async (_, res) => {
-  await new GenerateTicketUseCase().execute({
-    orderId: "77dad97b-d504-48c1-b296-c6af31e25477",
-    shippingCompany: "Carriers",
-    trackingCode: "SM82886187440BM",
-  });
-
-  return res.status(200).send("OK");
-});
+app.post("/generate-ticket", new GenerateTicketController().handle);
 
 AppDataSource.initialize().then(() => {
   console.clear();
