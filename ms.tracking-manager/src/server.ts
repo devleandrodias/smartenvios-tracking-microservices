@@ -3,14 +3,16 @@ import "express-async-errors";
 import "elastic-apm-node/start.js";
 
 import colors from "colors";
+import cron from "node-cron";
 import express from "express";
 
 import { envs } from "./config/env.config";
-import { GetTrackingCodeController } from "./modules/tracking/useCase/getTracking/getTracking.controller";
-import { UpdateTrackingEventConsumer } from "./modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.consumer";
-import { GenerateTicketUseCase } from "./modules/tracking/useCase/generateTicket/generateTicket.useCase";
-import { CreateOrderTrackingConsumer } from "./modules/tracking/useCase/createOrderTracking/createOrderTracking.consumer";
 import { AppDataSource } from "./lib/typeorm/data-source";
+import { KafkaConsumer } from "./lib/kafka/kafkaConsumer";
+
+import { GenerateTicketUseCase } from "./modules/tracking/useCase/generateTicket/generateTicket.useCase";
+import { GetTrackingCodeController } from "./modules/tracking/useCase/getTracking/getTracking.controller";
+import { UpdateTrackingEventUseCase } from "./modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.useCase";
 
 const app = express();
 
@@ -36,6 +38,10 @@ AppDataSource.initialize().then(() => {
   app.listen(envs.appPort, async () => {
     console.info(colors.cyan(`Server running at ${envs.appPort}`));
 
-    await new CreateOrderTrackingConsumer().consume();
+    cron.schedule("*/1 * * * *", async () => {
+      await new UpdateTrackingEventUseCase().execute();
+    });
+
+    await new KafkaConsumer().consume();
   });
 });

@@ -41,20 +41,15 @@
 
 // tracking manager fica ouvindo o tópico de pedidos que foram atualizados e realiza update no banco de dados com novo status do rastreio
 
+export enum ETrackingStatus {
+  COLETADO = "COLETADO",
+}
+
 export type TicketCreatedSchema = {
   orderId: string;
   trackingCode: string;
   shippingCompany: string;
 };
-
-export enum ETrackingActions {
-  UPDATE_EVENT = "UPDATE_EVENT",
-  NEW_EVENT = "NEW_EVENT",
-}
-
-export enum ETrackingStatus {
-  COLETADO = "COLETADO",
-}
 
 export type TrackingEvent = {
   description: string;
@@ -62,14 +57,12 @@ export type TrackingEvent = {
 };
 
 export type TrackingUpdateSchema = {
-  action: ETrackingActions;
   trackingCode: string;
   shippingCompany: string;
   events: TrackingEvent[];
 };
 
 export type TrackingNewEventSchema = {
-  action: ETrackingActions;
   trackingCode: string;
   shippingCompany: string;
   events: TrackingEvent[];

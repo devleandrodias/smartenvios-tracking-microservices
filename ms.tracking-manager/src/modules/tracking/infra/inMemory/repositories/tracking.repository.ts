@@ -42,7 +42,8 @@ export class TrackingRepositoryInMemory implements ITrackingRepository {
     }
 
     tracking.events.push({
-      observation: "",
+      tracking,
+      observation: "Coletado no CD",
       status: ESmartEnviosStatus.COLETADO,
     });
 
