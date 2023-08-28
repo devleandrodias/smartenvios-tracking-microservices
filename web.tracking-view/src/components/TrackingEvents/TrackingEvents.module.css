@@ -1,0 +1,93 @@
+.todoList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  width: 60vw;
+}
+
+.searchContainer {
+  flex: 1;
+  display: flex;
+  margin-top: -1.5rem;
+  justify-content: center;
+}
+
+.searchContainer input {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-right: 0.5rem;
+  color: var(--gray-300);
+  background: var(--gray-500);
+  border: 1px solid var(--gray-700);
+}
+
+.searchContainer button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  padding: 1rem;
+  color: var(--gray-100);
+  background: rgba(126, 75, 166, 0.8);
+}
+
+.taskHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  margin-top: 3rem;
+  color: var(--blue);
+}
+
+.counterTask {
+  color: var(--gray-200);
+  padding: 0.25rem 0.6rem;
+  border-radius: 16px;
+  margin-left: 0.5rem;
+  background: var(--gray-400);
+}
+
+.baseCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 1rem;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+
+  color: var(--gray-100);
+  background: var(--gray-500);
+  border: solid 1px var(--gray-400);
+}
+
+.baseCard:last-child {
+  margin-bottom: 1rem;
+}
+
+.baseCard span {
+  margin-left: 0.5rem;
+  flex: 1;
+}
+
+.blankTable {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 3rem 0rem;
+  color: var(--gray-300);
+  margin-top: 1rem;
+  border-top: 2px solid var(--gray-500);
+}
+
+.blankTable .mainTitle {
+  font-weight: 700;
+  margin-top: 1.5rem;
+}
