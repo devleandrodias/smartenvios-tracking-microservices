@@ -1,28 +1,24 @@
 import { Message } from "kafkajs";
 import { SchemaType } from "@kafkajs/confluent-schema-registry";
 
+import { producer } from "../../../../lib/kafka/kafka";
 import { registry } from "../../../../lib/kafka/schemaRegistry";
-import { EKafkaTopics, producer } from "../../../../lib/kafka/kafka";
 import { IGenerateTicketInput } from "./generateTicket.interfaces";
-import { TicketCreatedSchema } from "../../../../types/KafkaMessageSchemas";
+import { EKafkaTopics } from "../../../../shared/enuns/EKafkaTopics";
+
+import {
+  TicketSchema,
+  ticketSchema,
+} from "../../../../shared/schemas/TicketSchema";
 
 export class GenerateTicketUseCase {
   async execute(input: IGenerateTicketInput): Promise<void> {
-    const schema = `
-    {
-      "type": "record",
-      "name": "TicketCreatedSchema",
-      "namespace": "ticket",
-      "fields": [
-        { "name": "orderId", "type": "string" },
-        { "name": "trackingCode", "type": "string" },
-        { "name": "shippingCompany", "type": "string" }
-      ]
-    }`;
+    const { id } = await registry.register({
+      type: SchemaType.AVRO,
+      schema: ticketSchema,
+    });
 
-    const { id } = await registry.register({ type: SchemaType.AVRO, schema });
-
-    const ticketCreated: TicketCreatedSchema = {
+    const ticketCreated: TicketSchema = {
       orderId: input.orderId,
       trackingCode: input.trackingCode,
       shippingCompany: input.shippingCompany,

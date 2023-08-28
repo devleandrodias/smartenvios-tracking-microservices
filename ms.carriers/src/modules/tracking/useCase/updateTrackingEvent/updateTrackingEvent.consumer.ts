@@ -1,5 +1,6 @@
+import { kafka } from "../../../../lib/kafka/kafka";
 import { registry } from "../../../../lib/kafka/schemaRegistry";
-import { EKafkaTopics, kafka } from "../../../../lib/kafka/kafka";
+import { EKafkaTopics } from "../../../../shared/enuns/EKafkaTopics";
 import { UpdateTrackingEventUseCase } from "./updateTrackingEvent.useCase";
 
 export class UpdateTrackingEventConsumer {

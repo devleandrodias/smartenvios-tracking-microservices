@@ -1,12 +1,11 @@
 import { CarrierServices } from "../../../../services/carrier.services";
-import { IUpdateTrackingEventInput } from "./updateTrackingEvent.interfaces";
+import { ESmartEnviosStatus } from "../../../../shared/enuns/ESmartEnviosStatus";
 import { UpdateTrackingEventProducer } from "./updateTrackingEvent.producer";
 
 import {
-  ITrackingEvent,
-  ESmartEnviosStatus,
-  UpdateTrackingMessage,
-} from "../../../../types/UpdateTrackingMessage";
+  TrackingEvent,
+  TrackingSchema,
+} from "../../../../shared/schemas/TrackingSchema";
 
 export class UpdateTrackingEventUseCase {
   private readonly _carrierService: CarrierServices;
@@ -17,19 +16,19 @@ export class UpdateTrackingEventUseCase {
     this._updateTrackingEventProducer = new UpdateTrackingEventProducer();
   }
 
-  async execute(input: IUpdateTrackingEventInput): Promise<void> {
-    const { trackingCode, shippingCompany } = input;
+  async execute(schema: TrackingSchema): Promise<void> {
+    const { trackingCode, shippingCompany } = schema;
 
     const tracking = await this._carrierService.getTrackingByTrackingCode({
       trackingCode,
     });
 
-    const events: ITrackingEvent[] = tracking.Eventos.map((evento) => ({
-      description: evento.Descricao,
+    const events: TrackingEvent[] = tracking.Eventos.map((evento) => ({
+      observation: evento.Descricao,
       status: evento.Status as ESmartEnviosStatus,
     }));
 
-    const message: UpdateTrackingMessage = {
+    const message: TrackingSchema = {
       shippingCompany,
       trackingCode,
       events,

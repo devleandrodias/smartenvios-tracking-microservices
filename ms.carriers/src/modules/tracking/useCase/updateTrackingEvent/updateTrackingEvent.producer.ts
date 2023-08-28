@@ -1,35 +1,23 @@
-import { SchemaType } from "@kafkajs/confluent-schema-registry";
-import { EKafkaTopics, producer } from "../../../../lib/kafka/kafka";
-import { registry } from "../../../../lib/kafka/schemaRegistry";
-import { UpdateTrackingMessage } from "../../../../types/UpdateTrackingMessage";
 import { Message } from "kafkajs";
+import { SchemaType } from "@kafkajs/confluent-schema-registry";
+
+import { producer } from "../../../../lib/kafka/kafka";
+import { registry } from "../../../../lib/kafka/schemaRegistry";
+import { EKafkaTopics } from "../../../../shared/enuns/EKafkaTopics";
+
+import {
+  TrackingSchema,
+  trackingSchema,
+} from "../../../../shared/schemas/TrackingSchema";
 
 export class UpdateTrackingEventProducer {
-  async produce(message: UpdateTrackingMessage): Promise<void> {
+  async produce(message: TrackingSchema): Promise<void> {
     console.log("Produzindo mensagem de novo evento de rastreio da Carriers");
 
-    const schema = `
-      {
-        "type": "record",
-        "name": "TrackingNewEventSchema",
-        "namespace": "tracking",
-        "fields": [
-          { "name": "trackingCode", "type": "string" },
-          { "name": "shippingCompany", "type": "string" },
-          { "name": "events", "type": { "type": "array", "items": {
-            "name": "TrackingEvent",
-            "type": "record",
-            "namespace": "tracking",
-            "fields": [
-              { "name": "description", "type": "string" },
-              { "name": "status", "type": "string" }
-            ]
-          } } }
-        ]
-      }
-    `;
-
-    const { id } = await registry.register({ type: SchemaType.AVRO, schema });
+    const { id } = await registry.register({
+      type: SchemaType.AVRO,
+      schema: trackingSchema,
+    });
 
     await producer.connect();
 

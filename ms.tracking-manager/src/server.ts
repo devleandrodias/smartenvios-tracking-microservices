@@ -10,10 +10,9 @@ import { envs } from "./config/env.config";
 import { AppDataSource } from "./lib/typeorm/data-source";
 import { KafkaConsumer } from "./lib/kafka/kafkaConsumer";
 
-import { GenerateTicketUseCase } from "./modules/tracking/useCase/generateTicket/generateTicket.useCase";
-import { GetTrackingByCodeController } from "./modules/tracking/useCase/getTrackingByCode/getTrackingByCode.controller";
-import { UpdateTrackingEventUseCase } from "./modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.useCase";
 import { GenerateTicketController } from "./modules/tracking/useCase/generateTicket/generateTicket.controller";
+import { GetTrackingByCodeController } from "./modules/tracking/useCase/getTrackingByCode/getTrackingByCode.controller";
+import { ScheduleUpdateTrackingsUseCase } from "./modules/tracking/useCase/scheduleUpdateTrackings/scheduleUpdateTrackings.useCase";
 
 const app = express();
 
@@ -32,7 +31,7 @@ AppDataSource.initialize().then(() => {
     console.info(colors.cyan(`Server running at ${envs.appPort}`));
 
     cron.schedule("*/1 * * * *", async () => {
-      await new UpdateTrackingEventUseCase().execute();
+      await new ScheduleUpdateTrackingsUseCase().execute();
     });
 
     await new KafkaConsumer().consume();

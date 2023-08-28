@@ -1,33 +1,8 @@
+import { consumer } from "./kafka";
 import { registry } from "./schemaRegistry";
-import { EKafkaTopics, consumer, kafka } from "./kafka";
+import { EKafkaTopics } from "../../shared/enuns/EKafkaTopics";
 import { CreateOrderTrackingUseCase } from "../../modules/tracking/useCase/createOrderTracking/createOrderTracking.useCase";
-import { EachMessagePayload } from "kafkajs";
-
-async function createTricket({ message }: EachMessagePayload) {
-  const decodedMessage = {
-    ...message,
-    value: await registry.decode(message.value as Buffer),
-  };
-
-  const { orderId, shippingCompany, trackingCode } = decodedMessage.value;
-
-  console.log({ orderId, shippingCompany, trackingCode });
-
-  await new CreateOrderTrackingUseCase().execute({
-    orderId,
-    trackingCode,
-    shippingCompany,
-  });
-}
-
-async function updateTrackingEvent({ message }: EachMessagePayload) {
-  const decodedMessage = {
-    ...message,
-    value: await registry.decode(message.value as Buffer),
-  };
-
-  console.log("VALORES RECEBIDOS PELA TRANSPORTADORA", decodedMessage.value);
-}
+import { UpdateTrackingEventUseCase } from "../../modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.useCase";
 
 export class KafkaConsumer {
   async consume() {
@@ -38,13 +13,24 @@ export class KafkaConsumer {
     });
 
     await consumer.run({
-      eachMessage: async (payload) => {
-        switch (payload.topic) {
+      eachMessage: async ({ topic, message }) => {
+        const decodedMessage = {
+          ...message,
+          value: await registry.decode(message.value as Buffer),
+        };
+
+        switch (topic) {
           case EKafkaTopics.TICKET_CREATED:
-            createTricket(payload);
+            await new CreateOrderTrackingUseCase().execute({
+              orderId: decodedMessage.value.orderId,
+              trackingCode: decodedMessage.value.trackingCode,
+              shippingCompany: decodedMessage.value.shippingCompany,
+            });
             break;
           case EKafkaTopics.TRACKING_EVENT:
-            updateTrackingEvent(payload);
+            await new UpdateTrackingEventUseCase().execute({
+              trackingCode: decodedMessage.value.trackingCode,
+            });
             break;
         }
       },

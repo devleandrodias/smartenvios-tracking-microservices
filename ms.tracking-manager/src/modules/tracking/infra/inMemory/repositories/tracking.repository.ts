@@ -1,10 +1,11 @@
 import { randomUUID } from "node:crypto";
 
-import { ESmartEnviosStatus, ITracking } from "../../../entities/ITracking";
+import { ITracking } from "../../../entities/ITracking";
+import { ESmartEnviosStatus } from "../../../../../shared/enuns/ESmartEnviosStatus";
 
 import {
-  ISaveOrderTrackingInput,
   ITrackingRepository,
+  ISaveOrderTrackingInput,
 } from "../../../repositories/ITrackingRepository";
 
 export class TrackingRepositoryInMemory implements ITrackingRepository {

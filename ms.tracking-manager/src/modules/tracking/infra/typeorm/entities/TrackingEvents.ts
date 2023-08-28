@@ -1,16 +1,14 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
+  JoinColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
 
-import {
-  ITrackingEvent,
-  ESmartEnviosStatus,
-} from "../../../entities/ITracking";
 import { Tracking } from "./Tracking";
+import { ITrackingEvent } from "../../../entities/ITracking";
+import { ESmartEnviosStatus } from "../../../../../shared/enuns/ESmartEnviosStatus";
 
 @Entity("tracking_events")
 export class TrackingEvent implements ITrackingEvent {

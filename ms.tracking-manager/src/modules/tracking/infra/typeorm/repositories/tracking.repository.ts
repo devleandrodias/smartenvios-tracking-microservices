@@ -38,4 +38,8 @@ export class TrackingRepository implements ITrackingRepository {
       relations: ["events"],
     });
   }
+
+  async getTrackingNeedUpdate(): Promise<ITracking[]> {
+    return this.repository.find();
+  }
 }

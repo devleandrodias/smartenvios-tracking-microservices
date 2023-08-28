@@ -6,19 +6,3 @@ export enum ESmartEnviosStatus {
   EM_TRANSFERENCIA_PARA_O_HUB = "EM TRANSFERÊNCIA PARA O HUB",
   COLETADO = "COLETADO",
 }
-
-export type ITrackingEvent = {
-  description: string;
-  status: ESmartEnviosStatus;
-};
-
-export type UpdateTrackingMessage = {
-  shippingCompany: string;
-  trackingCode: string;
-  events: ITrackingEvent[];
-};
-
-export type HandleTrackingEvent = {
-  shippingCompany: string;
-  trackingCode: string;
-};
