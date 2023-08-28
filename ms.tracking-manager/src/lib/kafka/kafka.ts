@@ -1,11 +1,12 @@
 import { Kafka, Partitioners } from "kafkajs";
+import { envs } from "../../config/env.config";
 
 export const kafka = new Kafka({
-  clientId: "ms-carriers",
-  brokers: ["kafka:9092", "kafka:9094"],
+  clientId: envs.kafkaClientId,
+  brokers: envs.kafkaBrokers.split(","),
 });
 
-export const consumer = kafka.consumer({ groupId: "tracking-manager" });
+export const consumer = kafka.consumer({ groupId: envs.kafkaGroupId });
 
 export const producer = kafka.producer({
   createPartitioner: Partitioners.DefaultPartitioner,

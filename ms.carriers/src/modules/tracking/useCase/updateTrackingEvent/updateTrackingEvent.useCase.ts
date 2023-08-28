@@ -6,6 +6,7 @@ import {
   TrackingEvent,
   TrackingSchema,
 } from "../../../../shared/schemas/TrackingSchema";
+import { EShippingCompany } from "../../../../shared/enuns/EShippingCompany";
 
 export class UpdateTrackingEventUseCase {
   private readonly _carrierService: CarrierServices;
@@ -19,21 +20,23 @@ export class UpdateTrackingEventUseCase {
   async execute(schema: TrackingSchema): Promise<void> {
     const { trackingCode, shippingCompany } = schema;
 
-    const tracking = await this._carrierService.getTrackingByTrackingCode({
-      trackingCode,
-    });
+    if (shippingCompany === EShippingCompany.CARRIERS) {
+      const tracking = await this._carrierService.getTrackingByTrackingCode({
+        trackingCode,
+      });
 
-    const events: TrackingEvent[] = tracking.Eventos.map((evento) => ({
-      observation: evento.Descricao,
-      status: evento.Status as ESmartEnviosStatus,
-    }));
+      const events: TrackingEvent[] = tracking.Eventos.map((evento) => ({
+        observation: evento.Descricao,
+        status: evento.Status as ESmartEnviosStatus,
+      }));
 
-    const message: TrackingSchema = {
-      shippingCompany,
-      trackingCode,
-      events,
-    };
+      const message: TrackingSchema = {
+        shippingCompany,
+        trackingCode,
+        events,
+      };
 
-    await this._updateTrackingEventProducer.produce(message);
+      await this._updateTrackingEventProducer.produce(message);
+    }
   }
 }
