@@ -2,6 +2,7 @@ import "dotenv/config";
 import "express-async-errors";
 import "elastic-apm-node/start.js";
 
+import cors from "cors";
 import colors from "colors";
 import cron from "node-cron";
 import express from "express";
@@ -17,6 +18,8 @@ import { ScheduleUpdateTrackingsUseCase } from "./modules/tracking/useCase/sched
 const app = express();
 
 app.use(express.json());
+
+app.use(cors({ origin: "*" }));
 
 app.get("/:trackingCode", new GetTrackingByCodeController().handle);
 
