@@ -1,5 +1,7 @@
 # SmartEnvios Tracking Manager
 
+![SmartTracking](assets/SmartTracking.png)
+
 ## :orange_book: ms.carriers
 
 O serviço **ms.carriers** é responsável por interagir com as APIs externas das transportadoras. Ele consulta e obtém eventos de frete, como atualizações de status e localização, a partir das transportadoras. O serviço processa esses eventos e os publica em tópicos do Kafka para serem consumidos por outros componentes do sistema.
