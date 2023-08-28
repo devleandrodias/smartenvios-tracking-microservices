@@ -29,7 +29,9 @@ export class KafkaConsumer {
             break;
           case EKafkaTopics.TRACKING_EVENT:
             await new UpdateTrackingEventUseCase().execute({
+              events: decodedMessage.value.events,
               trackingCode: decodedMessage.value.trackingCode,
+              shippingCompany: decodedMessage.value.shippingCompany,
             });
             break;
         }

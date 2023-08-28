@@ -1,6 +1,6 @@
 import { CarrierServices } from "../../../../services/carrier.services";
-import { ESmartEnviosStatus } from "../../../../shared/enuns/ESmartEnviosStatus";
 import { UpdateTrackingEventProducer } from "./updateTrackingEvent.producer";
+import { ESmartEnviosStatus } from "../../../../shared/enuns/ESmartEnviosStatus";
 
 import {
   TrackingEvent,

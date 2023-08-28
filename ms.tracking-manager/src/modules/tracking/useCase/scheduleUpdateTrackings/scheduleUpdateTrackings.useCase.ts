@@ -13,6 +13,8 @@ import {
 
 export class ScheduleUpdateTrackingsUseCase {
   async execute() {
+    console.log(`CRON EXECUTADA AS ${new Date()}`);
+
     console.log(
       "Executando atualização de eventos de rastreio da transportadora"
     );

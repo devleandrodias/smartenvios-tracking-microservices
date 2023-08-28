@@ -21,6 +21,9 @@ export class TrackingEvent implements ITrackingEvent {
   @Column()
   observation!: string;
 
+  @Column()
+  trackingId!: string;
+
   @JoinColumn({ name: "trackingId" })
   @ManyToOne(() => Tracking, (tracking) => tracking.events)
   tracking!: Tracking;

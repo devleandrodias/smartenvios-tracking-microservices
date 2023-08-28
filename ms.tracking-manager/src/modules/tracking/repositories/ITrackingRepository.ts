@@ -1,4 +1,4 @@
-import { ITracking } from "../entities/ITracking";
+import { ITracking, ITrackingEvent } from "../entities/ITracking";
 
 export interface ISaveOrderTrackingInput {
   orderId: string;
@@ -7,7 +7,10 @@ export interface ISaveOrderTrackingInput {
 }
 
 export interface ITrackingRepository {
-  addTrackingEvent(): Promise<ITracking>;
   saveOrderTracking(input: ISaveOrderTrackingInput): Promise<ITracking>;
   getTrackingByCode(trackingCode: string): Promise<ITracking | null>;
+  addTrackingEvent(
+    trackingCode: string,
+    events: ITrackingEvent[]
+  ): Promise<void>;
 }

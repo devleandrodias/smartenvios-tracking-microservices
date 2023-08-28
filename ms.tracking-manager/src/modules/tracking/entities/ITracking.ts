@@ -3,6 +3,7 @@ import { ESmartEnviosStatus } from "../../../shared/enuns/ESmartEnviosStatus";
 export type ITrackingEvent = {
   observation: string;
   tracking?: ITracking;
+  trackingId: string;
   status: ESmartEnviosStatus;
 };
 

@@ -2,6 +2,7 @@ import { kafka } from "../../../../lib/kafka/kafka";
 import { registry } from "../../../../lib/kafka/schemaRegistry";
 import { EKafkaTopics } from "../../../../shared/enuns/EKafkaTopics";
 import { UpdateTrackingEventUseCase } from "./updateTrackingEvent.useCase";
+import { EShippingCompany } from "../../../../shared/enuns/EShippingCompany";
 
 export class UpdateTrackingEventConsumer {
   async consume() {
@@ -22,11 +23,13 @@ export class UpdateTrackingEventConsumer {
 
         const { trackingCode, shippingCompany, events } = decodedMessage.value;
 
-        await new UpdateTrackingEventUseCase().execute({
-          events,
-          trackingCode,
-          shippingCompany,
-        });
+        if (shippingCompany === EShippingCompany.CARRIERS) {
+          await new UpdateTrackingEventUseCase().execute({
+            events,
+            trackingCode,
+            shippingCompany,
+          });
+        }
       },
     });
   }
