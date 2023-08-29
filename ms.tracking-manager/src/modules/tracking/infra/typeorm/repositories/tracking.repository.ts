@@ -38,14 +38,24 @@ export class TrackingRepository implements ITrackingRepository {
     const tracking = await this.getTrackingByCode(trackingCode);
 
     if (tracking) {
-      events.forEach((eventData) => {
-        const newEvent = this.repositoryTrackingEvent.create({
-          trackingId: tracking.id,
-          status: eventData.status,
-          observation: eventData.observation,
-        });
+      const trackingEvents = await this.repositoryTrackingEvent.find({
+        where: { trackingId: tracking.id },
+      });
 
-        tracking.events.push(newEvent);
+      events.forEach((eventData) => {
+        const statusAlreadyExists = trackingEvents.find(
+          (event) => event.status === event.status
+        );
+
+        if (!statusAlreadyExists) {
+          const newEvent = this.repositoryTrackingEvent.create({
+            trackingId: tracking.id,
+            status: eventData.status,
+            observation: eventData.observation,
+          });
+
+          tracking.events.push(newEvent);
+        }
       });
 
       await this.repositoryTrackingEvent.save(tracking.events);

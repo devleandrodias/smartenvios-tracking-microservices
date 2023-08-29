@@ -1,12 +1,12 @@
 import { CarrierServices } from "../../../../services/carrier.services";
 import { UpdateTrackingEventProducer } from "./updateTrackingEvent.producer";
+import { EShippingCompany } from "../../../../shared/enuns/EShippingCompany";
 import { ESmartEnviosStatus } from "../../../../shared/enuns/ESmartEnviosStatus";
 
 import {
   TrackingEvent,
   TrackingSchema,
 } from "../../../../shared/schemas/TrackingSchema";
-import { EShippingCompany } from "../../../../shared/enuns/EShippingCompany";
 
 export class UpdateTrackingEventUseCase {
   private readonly _carrierService: CarrierServices;
