@@ -1,16 +1,14 @@
-import { ESmartEnviosStatus } from "../../../shared/enuns/ESmartEnviosStatus";
+import { Document } from "mongoose";
 
-export type ITrackingEvent = {
-  observation: string;
-  tracking?: ITracking;
-  trackingId: string;
-  status: ESmartEnviosStatus;
-};
+export interface IEvent {
+  status: string;
+  location: string;
+  timestamp: string;
+}
 
-export interface ITracking {
-  id: string;
+export interface ITracking extends Document {
   orderId: string;
-  shippingCompany: string;
+  carrier: string;
   trackingCode: string;
-  events: ITrackingEvent[];
+  events: IEvent[];
 }

@@ -1,6 +1,6 @@
 import { EShippingCompany } from "../../src/shared/enuns/EShippingCompany";
 import { ESmartEnviosStatus } from "../../src/shared/enuns/ESmartEnviosStatus";
-import { TrackingRepository } from "../../src/modules/tracking/infra/typeorm/repositories/tracking.repository";
+import { TrackingRepository } from "../../src/modules/tracking/infra/mongoose/repositories/tracking.repository";
 import { IUpdateTrackingEventInput } from "../../src/modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.interfaces";
 import { UpdateTrackingEventUseCase } from "../../src/modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.useCase";
 

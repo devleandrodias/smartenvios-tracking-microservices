@@ -1,7 +1,7 @@
 export type TicketSchema = {
   orderId: string;
+  carrier: string;
   trackingCode: string;
-  shippingCompany: string;
 };
 
 export const ticketSchema = `
@@ -11,7 +11,7 @@ export const ticketSchema = `
   "namespace": "ticket",
   "fields": [
     { "name": "orderId", "type": "string" },
-    { "name": "trackingCode", "type": "string" },
-    { "name": "shippingCompany", "type": "string" }
+    { "name": "carrier", "type": "string" },
+    { "name": "trackingCode", "type": "string" }
   ]
 }`;

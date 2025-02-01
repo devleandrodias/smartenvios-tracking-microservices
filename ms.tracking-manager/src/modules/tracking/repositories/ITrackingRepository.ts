@@ -1,16 +1,9 @@
-import { ITracking, ITrackingEvent } from "../entities/ITracking";
-
-export interface ISaveOrderTrackingInput {
-  orderId: string;
-  trackingCode: string;
-  shippingCompany: string;
-}
+import { ITracking, IEvent } from "../entities/ITracking";
+import { ICreateOrderTrackingInput } from "../useCase/createOrderTracking/createOrderTracking.interfaces";
 
 export interface ITrackingRepository {
-  saveOrderTracking(input: ISaveOrderTrackingInput): Promise<ITracking>;
+  saveOrderTracking(input: ICreateOrderTrackingInput): Promise<ITracking>;
+  getTrackingNeedUpdate(): Promise<ITracking[]>;
   getTrackingByCode(trackingCode: string): Promise<ITracking | null>;
-  addTrackingEvent(
-    trackingCode: string,
-    events: ITrackingEvent[]
-  ): Promise<void>;
+  addTrackingEvent(trackingCode: string, events: IEvent[]): Promise<void>;
 }

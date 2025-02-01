@@ -1,8 +1,8 @@
 import { Message } from "kafkajs";
 import { SchemaType } from "@kafkajs/confluent-schema-registry";
 
-import { producer } from "../../../../lib/kafka/kafka";
-import { registry } from "../../../../lib/kafka/schemaRegistry";
+import { producer } from "../../../../shared/lib/kafka/kafka";
+import { registry } from "../../../../shared/lib/kafka/schemaRegistry";
 import { EKafkaTopics } from "../../../../shared/enuns/EKafkaTopics";
 
 import {

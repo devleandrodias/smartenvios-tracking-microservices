@@ -1,5 +1,5 @@
 import { EShippingCompany } from "../../src/shared/enuns/EShippingCompany";
-import { TrackingRepository } from "../../src/modules/tracking/infra/typeorm/repositories/tracking.repository";
+import { TrackingRepository } from "../../src/modules/tracking/infra/mongoose/repositories/tracking.repository";
 import { CreateOrderTrackingUseCase } from "../../src/modules/tracking/useCase/createOrderTracking/createOrderTracking.useCase";
 import { ICreateOrderTrackingInput } from "../../src/modules/tracking/useCase/createOrderTracking/createOrderTracking.interfaces";
 

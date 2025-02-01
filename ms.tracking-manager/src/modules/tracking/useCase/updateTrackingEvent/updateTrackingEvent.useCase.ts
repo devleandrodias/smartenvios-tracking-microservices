@@ -1,16 +1,26 @@
-import { IUpdateTrackingEventInput } from "./updateTrackingEvent.interfaces";
-import { TrackingRepository } from "../../infra/typeorm/repositories/tracking.repository";
+import { inject, injectable } from "tsyringe";
 
+import { IEvent } from "../../entities/ITracking";
+import { IUpdateTrackingEventInput } from "./updateTrackingEvent.interfaces";
+import { ITrackingRepository } from "../../repositories/ITrackingRepository";
+
+@injectable()
 export class UpdateTrackingEventUseCase {
+  constructor(
+    @inject("TrackingRepository") private repository: ITrackingRepository
+  ) {}
+
   async execute(input: IUpdateTrackingEventInput): Promise<void> {
     const { trackingCode, events } = input;
 
-    const repository = new TrackingRepository();
+    console.info(`[${trackingCode}] - Encontrado novos eventos de rastreio`);
 
-    console.log(
-      `TRACKING ENCONTRADO PARA ATUALIZAR EVENTOS DE RASTREIO - [${trackingCode}]`
-    );
+    const smartEnviosEvents: IEvent[] = events.map((event) => ({
+      status: event.status,
+      location: event.location,
+      timestamp: event.timestamp,
+    }));
 
-    await repository.addTrackingEvent(trackingCode, events);
+    await this.repository.addTrackingEvent(trackingCode, smartEnviosEvents);
   }
 }

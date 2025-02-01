@@ -9,16 +9,13 @@ export class CarrierServices {
     const { trackingCode } = request;
 
     try {
-      const response = await carrierApi.get<ITrackingResponse>(
-        `/client/Carriers/Tracking/${trackingCode}`,
-        { headers: { Authorization: `Bearer ${envs.carrierToken}` } }
-      );
-
+      const url = `/client/Carriers/Tracking/${trackingCode}`
+      const headers = { headers: { Authorization: `Bearer ${envs.carrierToken}` } }
+      const response = await carrierApi.get<ITrackingResponse>(url, headers);
       return response.data;
     } catch (error) {
-      throw new Error(
-        `Ocorreu um erro ao tentar obter rastreio para ${trackingCode}`
-      );
+      const message = `Ocorreu um erro ao tentar obter rastreio para ${trackingCode}`
+      throw new Error(message);
     }
   }
 }

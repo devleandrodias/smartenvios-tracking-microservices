@@ -1,13 +1,15 @@
 import { ESmartEnviosStatus } from "../enuns/ESmartEnviosStatus";
 
 export type TrackingEvent = {
-  observation: string;
+  location: string;
+  timestamp: string;
   status: ESmartEnviosStatus;
 };
 
 export type TrackingSchema = {
+  orderId: string;
+  carrier: string;
   trackingCode: string;
-  shippingCompany: string;
   events: TrackingEvent[];
 };
 
@@ -17,8 +19,9 @@ export const trackingSchema = `
   "name": "TrackingSchema",
   "namespace": "tracking",
   "fields": [
+    { "name": "carrier", "type": "string" },
+    { "name": "orderId", "type": "string" },
     { "name": "trackingCode", "type": "string" },
-    { "name": "shippingCompany", "type": "string" },
     { "name": "events", 
       "type": { 
         "type": "array", 
@@ -27,8 +30,9 @@ export const trackingSchema = `
           "type": "record",
           "namespace": "tracking",
           "fields": [
-            { "name": "observation", "type": "string" },
-            { "name": "status", "type": "string" }
+            { "name": "status", "type": "string" },
+            { "name": "location", "type": "string" },
+            { "name": "timestamp", "type": "string" }
           ]
         } 
       } 

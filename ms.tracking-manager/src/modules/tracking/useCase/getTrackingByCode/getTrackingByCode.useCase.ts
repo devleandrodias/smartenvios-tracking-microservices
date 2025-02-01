@@ -1,7 +1,10 @@
-import { ITracking } from "../../entities/ITracking";
-import { IGetTrackingByCodeInput } from "./getTrackingByCode.interfaces";
-import { TrackingRepository } from "../../infra/typeorm/repositories/tracking.repository";
+import { injectable } from "tsyringe";
 
+import { ITracking } from "../../entities/ITracking";
+import { IGetTrackingByCodeInput } from "./getTrackingByCode.dtos";
+import { TrackingRepository } from "../../infra/mongoose/repositories/tracking.repository";
+
+@injectable()
 export class GetTrackingByCodeUseCase {
   async execute(input: IGetTrackingByCodeInput): Promise<ITracking> {
     const repository = new TrackingRepository();

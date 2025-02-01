@@ -1,42 +1,51 @@
 import { Message } from "kafkajs";
+import { format } from "date-fns";
+import { inject, injectable } from "tsyringe";
 import { SchemaType } from "@kafkajs/confluent-schema-registry";
 
-import { producer } from "../../../../lib/kafka/kafka";
-import { registry } from "../../../../lib/kafka/schemaRegistry";
+import { producer } from "../../../../shared/lib/kafka/kafka";
 import { EKafkaTopics } from "../../../../shared/enuns/EKafkaTopics";
-import { TrackingRepository } from "../../infra/typeorm/repositories/tracking.repository";
+import { registry } from "../../../../shared/lib/kafka/schemaRegistry";
+import { ITrackingRepository } from "../../repositories/ITrackingRepository";
+import { ESmartEnviosStatus } from "../../../../shared/enuns/ESmartEnviosStatus";
 
 import {
   TrackingSchema,
   trackingSchema,
 } from "../../../../shared/schemas/TrackingSchema";
 
+@injectable()
 export class ScheduleUpdateTrackingsUseCase {
+  constructor(
+    @inject("TrackingRepository") private repository: ITrackingRepository
+  ) {}
+
   async execute() {
-    console.log(`CRON EXECUTADA AS ${new Date()}`);
-
-    console.log(
-      "Executando atualização de eventos de rastreio da transportadora"
+    console.info(
+      `[${format(
+        new Date(),
+        "dd/MM/yyyy HH:mm:ss"
+      )}] - Executando atualização dos eventos de rastreio`
     );
-
-    const repository = new TrackingRepository();
 
     const { id } = await registry.register({
       type: SchemaType.AVRO,
       schema: trackingSchema,
     });
 
-    const trackings = await repository.getTrackingNeedUpdate();
+    const trackings = await this.repository.getTrackingNeedUpdate();
 
     const outgoingMessages: Message[] = [];
 
     for (const tracking of trackings) {
       const message: TrackingSchema = {
+        carrier: tracking.carrier,
+        orderId: tracking.orderId,
         trackingCode: tracking.trackingCode,
-        shippingCompany: tracking.shippingCompany,
         events: tracking.events.map((event) => ({
-          status: event.status,
-          observation: event.observation,
+          location: event.location,
+          timestamp: event.timestamp,
+          status: event.status as ESmartEnviosStatus,
         })),
       };
 

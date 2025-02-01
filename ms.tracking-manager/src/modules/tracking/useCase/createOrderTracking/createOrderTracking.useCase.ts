@@ -1,14 +1,23 @@
+import { inject, injectable } from "tsyringe";
+
 import { ICreateOrderTrackingInput } from "./createOrderTracking.interfaces";
-import { TrackingRepository } from "../../infra/typeorm/repositories/tracking.repository";
+import { ITrackingRepository } from "../../repositories/ITrackingRepository";
 
+@injectable()
 export class CreateOrderTrackingUseCase {
-  async execute(input: ICreateOrderTrackingInput): Promise<void> {
-    console.log("Executando criação do rastreio para um novo pedido");
+  constructor(
+    @inject("TrackingRepository") private repository: ITrackingRepository
+  ) {}
 
-    await new TrackingRepository().saveOrderTracking({
+  async execute(input: ICreateOrderTrackingInput): Promise<void> {
+    console.log(
+      `[${input.trackingCode}] - Executando criação do rastreio para um novo pedido`
+    );
+
+    await this.repository.saveOrderTracking({
       orderId: input.orderId,
+      carrier: input.carrier,
       trackingCode: input.trackingCode,
-      shippingCompany: input.shippingCompany,
     });
   }
 }

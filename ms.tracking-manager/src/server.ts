@@ -1,42 +1,39 @@
-import "dotenv/config";
+import "reflect-metadata";
 import "express-async-errors";
 import "elastic-apm-node/start.js";
 
 import cors from "cors";
-import colors from "colors";
 import cron from "node-cron";
 import express from "express";
+import mongoose from "mongoose";
+import { container } from "tsyringe";
 
+import "./shared/container";
+
+import { routes } from "./modules/routes";
 import { envs } from "./config/env.config";
-import { AppDataSource } from "./lib/typeorm/data-source";
-import { KafkaConsumer } from "./lib/kafka/kafkaConsumer";
-
-import { GenerateTicketController } from "./modules/tracking/useCase/generateTicket/generateTicket.controller";
-import { GetTrackingByCodeController } from "./modules/tracking/useCase/getTrackingByCode/getTrackingByCode.controller";
+import { KafkaConsumer } from "./shared/lib/kafka/kafkaConsumer";
 import { ScheduleUpdateTrackingsUseCase } from "./modules/tracking/useCase/scheduleUpdateTrackings/scheduleUpdateTrackings.useCase";
 
 const app = express();
 
 app.use(express.json());
-
 app.use(cors({ origin: "*" }));
+app.use(routes);
 
-app.get("/:trackingCode", new GetTrackingByCodeController().handle);
+mongoose
+  .connect(envs.mongoUri)
+  .then(() => {
+    app.listen(envs.appPort, async () => {
+      console.clear();
 
-app.post("/generate-ticket", new GenerateTicketController().handle);
+      console.info(`Server running at ${envs.appPort}\n`);
 
-AppDataSource.initialize().then(() => {
-  console.clear();
+      cron.schedule("*/1 * * * *", async () => {
+        await container.resolve(ScheduleUpdateTrackingsUseCase).execute();
+      });
 
-  console.info(colors.cyan("Database running...\n"));
-
-  app.listen(envs.appPort, async () => {
-    console.info(colors.cyan(`Server running at ${envs.appPort}`));
-
-    cron.schedule("*/1 * * * *", async () => {
-      await new ScheduleUpdateTrackingsUseCase().execute();
+      await new KafkaConsumer().consume();
     });
-
-    await new KafkaConsumer().consume();
-  });
-});
+  })
+  .catch((err) => console.error("MongoDB connection error:", err));

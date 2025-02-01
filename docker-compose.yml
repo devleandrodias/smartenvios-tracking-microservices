@@ -1,135 +1,91 @@
-version: "3"
-
 services:
-  ms-tracking-manager:
-    image: ms-tracking-manager
-    container_name: ms-tracking-manager
-    build:
-      context: ./ms.tracking-manager
-      dockerfile: Dockerfile
-    ports:
-      - "4000:4000"
-    networks:
-      - smartnetwork
-    volumes:
-      - ./ms.tracking-manager:/usr/app/ms-tracking-manager
-    depends_on:
-      - apm
+  # ms-tracking-manager:
+  #   image: ms-tracking-manager
+  #   container_name: ms-tracking-manager
+  #   build:
+  #     context: ./ms.tracking-manager
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "4000:4000"
+  #   networks:
+  #     - smartnetwork
+  #   volumes:
+  #     - ./ms.tracking-manager:/usr/app/ms-tracking-manager
+  #   depends_on:
+  #     - apm
 
-  ms-carriers:
-    image: ms-carriers
-    container_name: ms-carriers
-    build:
-      context: ./ms.carriers
-      dockerfile: Dockerfile
-    ports:
-      - "4001:4001"
-    networks:
-      - smartnetwork
-    volumes:
-      - ./ms.carriers:/usr/app/ms-carriers
-    depends_on:
-      - apm
+  # ms-carriers:
+  #   image: ms-carriers
+  #   container_name: ms-carriers
+  #   build:
+  #     context: ./ms.carriers
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "4001:4001"
+  #   networks:
+  #     - smartnetwork
+  #   volumes:
+  #     - ./ms.carriers:/usr/app/ms-carriers
+  #   depends_on:
+  #     - apm
 
-  web-tracking-view:
-    image: web-tracking-view
-    container_name: web-tracking-view
-    build:
-      context: ./web.tracking-view
-      dockerfile: Dockerfile
-    ports:
-      - "4002:4002"
-    networks:
-      - smartnetwork
-    volumes:
-      - ./web.tracking-view:/usr/app/web-tracking-view
-    depends_on:
-      - ms-tracking-manager
+  # web-tracking-view:
+  #   image: web-tracking-view
+  #   container_name: web-tracking-view
+  #   build:
+  #     context: ./web.tracking-view
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "4002:4002"
+  #   networks:
+  #     - smartnetwork
+  #   volumes:
+  #     - ./web.tracking-view:/usr/app/web-tracking-view
+  #   depends_on:
+  #     - ms-tracking-manager
 
-  zookeeper:
-    container_name: zookeeper
-    image: confluentinc/cp-zookeeper:6.0.0
-    restart: on-failure
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-    networks:
-      - smartnetwork
-
-  kafka:
-    image: confluentinc/cp-kafka:6.0.0
-    restart: on-failure
-    container_name: kafka
-    depends_on:
-      - zookeeper
+  broker:
+    image: confluentinc/confluent-local:7.4.1
+    hostname: broker
+    container_name: broker
     ports:
+      - "8082:8082"
       - "9092:9092"
-      - "9094:9094"
+      - "9101:9101"
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LISTENERS: INTERNAL://:9092,OUTSIDE://:9094
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://host.docker.internal:9094
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
-    networks:
-      - smartnetwork
-
-  control-center:
-    image: confluentinc/cp-enterprise-control-center:6.0.0
-    restart: on-failure
-    container_name: control-center
-    hostname: control-center
-    depends_on:
-      - kafka
-    ports:
-      - "9021:9021"
-    environment:
-      CONTROL_CENTER_BOOTSTRAP_SERVERS: "kafka:9092"
-      CONTROL_CENTER_REPLICATION_FACTOR: 1
-      CONTROL_CENTER_CONNECT_CLUSTER: http://kafka-connect:8083
-      PORT: 9021
-    networks:
-      - smartnetwork
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker:29093'
+      KAFKA_LISTENERS: 'PLAINTEXT://broker:29092,CONTROLLER://broker:29093,PLAINTEXT_HOST://0.0.0.0:9092'
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:6.0.0
+    image: confluentinc/cp-schema-registry:7.4.1
     hostname: schema-registry
     container_name: schema-registry
-    depends_on:
-      - kafka
     ports:
       - "8081:8081"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka:9092"
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
-    networks:
-      - smartnetwork
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://broker:29092
 
-  postgres:
-    image: postgres
-    container_name: postgres
-    environment:
-      POSTGRES_DB: "smartenvios"
-      POSTGRES_PASSWORD: "PostgresSmartEnvios!"
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
     ports:
-      - "5432:5432"
-    networks:
-      - smartnetwork
+      - 8080:8080
+    environment:
+      DYNAMIC_CONFIG_ENABLED: true
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker:29092
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
 
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "admin@smartenvios.com"
-      PGADMIN_DEFAULT_PASSWORD: "PgadminSmartEnvios!"
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
     ports:
-      - "16543:80"
-    depends_on:
-      - postgres
-    networks:
-      - smartnetwork
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: smartenvios
+      MONGO_INITDB_ROOT_PASSWORD: SmartEnvios!2025
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.0
@@ -150,8 +106,6 @@ services:
       - ./elasticsearch_data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
-    networks:
-      - smartnetwork
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.13.0
@@ -161,8 +115,6 @@ services:
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
       ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
-    networks:
-      - smartnetwork
     depends_on:
       - elasticsearch
 
@@ -176,9 +128,3 @@ services:
     restart: on-failure
     depends_on:
       - kibana
-    networks:
-      - smartnetwork
-
-networks:
-  smartnetwork:
-    driver: bridge

@@ -1,7 +1,7 @@
 import { ITracking } from "../../src/modules/tracking/entities/ITracking";
 import { EShippingCompany } from "../../src/shared/enuns/EShippingCompany";
-import { TrackingRepository } from "../../src/modules/tracking/infra/typeorm/repositories/tracking.repository";
-import { IGetTrackingByCodeInput } from "../../src/modules/tracking/useCase/getTrackingByCode/getTrackingByCode.interfaces";
+import { TrackingRepository } from "../../src/modules/tracking/infra/mongoose/repositories/tracking.repository";
+import { IGetTrackingByCodeInput } from "../../src/modules/tracking/useCase/getTrackingByCode/getTrackingByCode.dtos";
 import { GetTrackingByCodeUseCase } from "../../src/modules/tracking/useCase/getTrackingByCode/getTrackingByCode.useCase";
 
 describe("[GetTrackingByCodeUseCase]", () => {

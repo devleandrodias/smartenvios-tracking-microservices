@@ -9,34 +9,36 @@ import {
 } from "../../../../shared/schemas/TrackingSchema";
 
 export class UpdateTrackingEventUseCase {
-  private readonly _carrierService: CarrierServices;
-  private readonly _updateTrackingEventProducer: UpdateTrackingEventProducer;
+  private readonly carrierService: CarrierServices;
+  private readonly updateTrackingEventProducer: UpdateTrackingEventProducer;
 
   constructor() {
-    this._carrierService = new CarrierServices();
-    this._updateTrackingEventProducer = new UpdateTrackingEventProducer();
+    this.carrierService = new CarrierServices();
+    this.updateTrackingEventProducer = new UpdateTrackingEventProducer();
   }
 
   async execute(schema: TrackingSchema): Promise<void> {
-    const { trackingCode, shippingCompany } = schema;
+    const { trackingCode, carrier, orderId } = schema;
 
-    if (shippingCompany === EShippingCompany.CARRIERS) {
-      const tracking = await this._carrierService.getTrackingByTrackingCode({
+    if (carrier === EShippingCompany.CARRIERS) {
+      const tracking = await this.carrierService.getTrackingByTrackingCode({
         trackingCode,
       });
 
       const events: TrackingEvent[] = tracking.Eventos.map((evento) => ({
-        observation: evento.Descricao,
+        location: "São Paulo",
+        timestamp: new Date().toString(),
         status: evento.Status as ESmartEnviosStatus,
       }));
 
       const message: TrackingSchema = {
-        shippingCompany,
-        trackingCode,
         events,
+        orderId,
+        carrier,
+        trackingCode,
       };
 
-      await this._updateTrackingEventProducer.produce(message);
+      await this.updateTrackingEventProducer.produce(message);
     }
   }
 }

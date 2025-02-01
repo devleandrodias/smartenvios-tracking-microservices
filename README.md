@@ -10,7 +10,7 @@ O serviço **ms.carriers** é responsável por interagir com as APIs externas da
 
 O serviço **ms.tracking-manager** é o núcleo do sistema de rastreamento. Ele consome os eventos relacionados à criação de pedidos, registra esses pedidos em um banco de dados e determina quais pedidos ainda estão em trânsito. O serviço também é responsável por agendar verificações regulares dos pedidos em andamento, buscar atualizações de rastreio junto ao banco de dados e publicar mensagens no Kafka para solicitar atualizações aos serviços das transportadoras.
 
-## :blue_book: ms.tracking-view
+## :blue_book: web.tracking-view
 
 O aplicativo web **web.tracking-view** é a interface de usuário para os clientes da SmartEnvios. Ele permite que os clientes visualizem o status e o progresso de seus pedidos em um painel centralizado. O aplicativo consome mensagens do Kafka para atualizar dinamicamente as informações de rastreio exibidas aos clientes. Isso fornece uma maneira eficaz para os clientes acompanharem seus pedidos de diferentes transportadoras em uma única tela, eliminando a necessidade de acessar sistemas separados.
 

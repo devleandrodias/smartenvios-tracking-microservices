@@ -1,7 +1,7 @@
 import { SchemaType } from "@kafkajs/confluent-schema-registry";
-import { producer } from "../../src/lib/kafka/kafka";
-import { registry } from "../../src/lib/kafka/schemaRegistry";
-import { TrackingRepository } from "../../src/modules/tracking/infra/typeorm/repositories/tracking.repository";
+import { producer } from "../../src/shared/lib/kafka/kafka";
+import { registry } from "../../src/shared/lib/kafka/schemaRegistry";
+import { TrackingRepository } from "../../src/modules/tracking/infra/mongoose/repositories/tracking.repository";
 import { ScheduleUpdateTrackingsUseCase } from "../../src/modules/tracking/useCase/scheduleUpdateTrackings/scheduleUpdateTrackings.useCase";
 import { trackingSchema } from "../../src/shared/schemas/TrackingSchema";
 import { EKafkaTopics } from "../../src/shared/enuns/EKafkaTopics";

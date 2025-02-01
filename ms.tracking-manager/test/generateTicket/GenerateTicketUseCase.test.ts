@@ -1,12 +1,12 @@
 import { SchemaType } from "@kafkajs/confluent-schema-registry";
 
-import { producer } from "../../src/lib/kafka/kafka";
-import { registry } from "../../src/lib/kafka/schemaRegistry";
+import { producer } from "../../src/shared/lib/kafka/kafka";
+import { registry } from "../../src/shared/lib/kafka/schemaRegistry";
 import { EKafkaTopics } from "../../src/shared/enuns/EKafkaTopics";
 import { ticketSchema } from "../../src/shared/schemas/TicketSchema";
 import { EShippingCompany } from "../../src/shared/enuns/EShippingCompany";
-import { IGenerateTicketInput } from "../../src/modules/tracking/useCase/generateTicket/generateTicket.interfaces";
-import { GenerateTicketUseCase } from "../../src/modules/tracking/useCase/generateTicket/generateTicket.useCase";
+import { IGenerateTicketInput } from "../../src/modules/ticket/useCases/generateTicket/generateTicket.dtos";
+import { GenerateTicketUseCase } from "../../src/modules/ticket/useCases/generateTicket/generateTicket.useCase";
 
 describe("[GenerateTicketUseCase]", () => {
   let generateTicketUseCase: GenerateTicketUseCase;
