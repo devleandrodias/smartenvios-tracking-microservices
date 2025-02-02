@@ -1,0 +1,119 @@
+{
+	"info": {
+		"_postman_id": "9f111e11-f922-4cf4-87f0-c4338dd1f1a5",
+		"name": "Smart Envios Tracking Manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33334974",
+		"_collection_link": "https://smartblackcode.postman.co/workspace/Smart-Black-Code-Workspace~4486ab47-2be1-4936-80cf-e7213afe5cc2/collection/33334974-9f111e11-f922-4cf4-87f0-c4338dd1f1a5?action=share&source=collection_link&creator=33334974"
+	},
+	"item": [
+		{
+			"name": "ms-carriers",
+			"item": [
+				{
+					"name": "get tracking events",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuY2FycmllcnMuY29tLmJyXC9jbGllbnRcL2xvZ2luIiwiaWF0IjoxNjAzMTIxOTM0LCJuYmYiOjE2MDMxMjE5MzQsImp0aSI6Im1XZ1NucmJDaDlYa08wbGkiLCJzdWIiOjExNzQwLCJwcnYiOiI4N2UwYWYxZWY5ZmQxNTgxMmZkZWM5NzE1M2ExNGUwYjA0NzU0NmFhIiwibmFtZSI6IkFQSSBTTUFSVCBFTlZJT1MiLCJ1c2VybmFtZSI6IkFQSS5TTUFSVEVOVklPUyJ9.DSln97XIpu2PMERsfQY5MjYKiGrQb6NDRh0KYtJ03Rs"
+							}
+						],
+						"url": {
+							"raw": "http://api.carriers.com.br/client/Carriers/Tracking/SM82886187440BM",
+							"protocol": "http",
+							"host": [
+								"api",
+								"carriers",
+								"com",
+								"br"
+							],
+							"path": [
+								"client",
+								"Carriers",
+								"Tracking",
+								"SM82886187440BM"
+							]
+						},
+						"description": "Generated from cURL: curl --request GET \\\r\n  --url http://api.carriers.com.br/client/Carriers/Tracking/SM82886187440BM \\\r\n  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuY2FycmllcnMuY29tLmJyXC9jbGllbnRcL2xvZ2luIiwiaWF0IjoxNjAzMTIxOTM0LCJuYmYiOjE2MDMxMjE5MzQsImp0aSI6Im1XZ1NucmJDaDlYa08wbGkiLCJzdWIiOjExNzQwLCJwcnYiOiI4N2UwYWYxZWY5ZmQxNTgxMmZkZWM5NzE1M2ExNGUwYjA0NzU0NmFhIiwibmFtZSI6IkFQSSBTTUFSVCBFTlZJT1MiLCJ1c2VybmFtZSI6IkFQSS5TTUFSVEVOVklPUyJ9.DSln97XIpu2PMERsfQY5MjYKiGrQb6NDRh0KYtJ03Rs'\r\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ms-ticket-manager",
+			"item": [
+				{
+					"name": "ticket",
+					"item": [
+						{
+							"name": "generate ticket",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"carrier\": \"Carriers\",\r\n    \"trackingCode\": \"SM82886187440BM\",\r\n    \"orderId\": \"77dad97b-d504-48c1-b296-c6af31e25477\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:4002/generate-ticket",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4002",
+									"path": [
+										"generate-ticket"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "ms-tracking-manager",
+			"item": [
+				{
+					"name": "tracking",
+					"item": [
+						{
+							"name": "get tracking events",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:4000/:trackingCode",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										":trackingCode"
+									],
+									"variable": [
+										{
+											"key": "trackingCode",
+											"value": "SM82886187440BM"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
