@@ -1,6 +1,5 @@
-import "reflect-metadata";
 import "express-async-errors";
-import "elastic-apm-node/start.js";
+import "reflect-metadata";
 
 import cors from "cors";
 import cron from "node-cron";

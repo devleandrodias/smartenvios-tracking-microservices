@@ -91,8 +91,6 @@ A observabilidade no projeto é a capacidade de entender e monitorar a saúde, d
 
 **Monitoramento em Tempo Real**: A observação em tempo real de métricas, eventos e comportamentos do sistema permite detectar anomalias e tomar medidas imediatas. Isso contribui para a manutenção proativa e a minimização do tempo de inatividade.
 
-**Ferramentas de APM**: Ferramentas de APM, como o Elastic APM, permitem rastrear a performance das aplicações e seus componentes, identificando gargalos e melhorias potenciais.
-
 **Ferramentas de Visualização de Dados**: Plataformas de visualização, como o Kibana, permitem criar painéis interativos para monitorar métricas, gráficos de eventos e facilitar a análise dos dados coletados.
 
 ### Benefícios da Observabilidade:
@@ -118,8 +116,6 @@ Em resumo, a observabilidade é essencial para entender e aprimorar a operação
 **React**: Biblioteca JavaScript para construção de interfaces de usuário interativas e dinâmicas. É usada para criar o painel de acompanhamento do usuário, permitindo uma experiência de usuário rica e responsiva.
 
 **Docker**: Plataforma de virtualização que permite empacotar aplicativos e suas dependências em contêineres isolados. Isso facilita a implantação consistente e escalonável de aplicativos em ambientes diferentes.
-
-**Elastic Stack**: Também conhecido como ELK Stack, é um conjunto de ferramentas que inclui o Elasticsearch (para pesquisa e análise de dados), o Logstash (para coleta, processamento e enriquecimento de dados) e o Kibana (para visualização de dados).
 
 **Schema Registry**: Componente que permite gerenciar e armazenar esquemas de dados no formato AVRO, garantindo a compatibilidade entre diferentes versões de esquemas usados na comunicação entre microsserviços.
 
