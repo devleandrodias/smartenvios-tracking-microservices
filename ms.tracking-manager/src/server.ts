@@ -1,5 +1,5 @@
-import "express-async-errors";
 import "reflect-metadata";
+import "express-async-errors";
 
 import cors from "cors";
 import cron from "node-cron";
@@ -26,7 +26,9 @@ mongoose
     app.listen(envs.appPort, async () => {
       console.clear();
 
-      console.info(`Server running at ${envs.appPort}\n`);
+      console.info(
+        `[ms.tracking-manager] - Server running at ${envs.appPort}\n`
+      );
 
       cron.schedule("*/1 * * * *", async () => {
         await container.resolve(ScheduleUpdateTrackingsUseCase).execute();

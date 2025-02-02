@@ -9,7 +9,7 @@ const app = express();
 app.listen(envs.appPort, async () => {
   console.clear();
 
-  console.info(`Server running at ${envs.appPort}\n`);
+  console.info(`[ms.carriers] - Server running at ${envs.appPort}\n`);
 
   await new KafkaConsumer().consume();
 });

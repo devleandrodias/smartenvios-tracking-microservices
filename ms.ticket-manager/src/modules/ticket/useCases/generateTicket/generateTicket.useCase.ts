@@ -2,10 +2,10 @@ import { Message } from "kafkajs";
 import { injectable } from "tsyringe";
 import { SchemaType } from "@kafkajs/confluent-schema-registry";
 
+import { producer } from "../../../../shared/lib/kafka";
 import { IGenerateTicketInput } from "./generateTicket.dtos";
-import { producer } from "../../../../shared/lib/kafka/kafka";
+import { registry } from "../../../../shared/lib/schemaRegistry";
 import { EKafkaTopics } from "../../../../shared/enuns/EKafkaTopics";
-import { registry } from "../../../../shared/lib/kafka/schemaRegistry";
 
 import {
   TicketSchema,
@@ -30,6 +30,8 @@ export class GenerateTicketUseCase {
       key: "ticket",
       value: await registry.encode(id, ticketCreated),
     };
+
+    console.info(`[${ticketCreated.trackingCode}] - Gerando nova etiqueta`);
 
     await producer.connect();
 

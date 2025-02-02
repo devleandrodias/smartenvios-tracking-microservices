@@ -6,6 +6,6 @@ import { ITrackingRepository } from "../../modules/tracking/repositories/ITracki
 import { TrackingRepository } from "../../modules/tracking/infra/mongoose/repositories/tracking.repository";
 
 container.registerSingleton<ITrackingRepository>(
-    "TrackingRepository",
-    TrackingRepository
+  "TrackingRepository",
+  TrackingRepository
 );
