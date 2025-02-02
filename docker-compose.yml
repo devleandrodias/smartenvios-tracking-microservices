@@ -11,8 +11,6 @@ services:
   #     - smartnetwork
   #   volumes:
   #     - ./ms.tracking-manager:/usr/app/ms-tracking-manager
-  #   depends_on:
-  #     - apm
 
   # ms-carriers:
   #   image: ms-carriers
@@ -26,8 +24,6 @@ services:
   #     - smartnetwork
   #   volumes:
   #     - ./ms.carriers:/usr/app/ms-carriers
-  #   depends_on:
-  #     - apm
 
   # web-tracking-view:
   #   image: web-tracking-view
@@ -41,9 +37,7 @@ services:
   #     - smartnetwork
   #   volumes:
   #     - ./web.tracking-view:/usr/app/web-tracking-view
-  #   depends_on:
-  #     - ms-tracking-manager
-
+  
   broker:
     image: confluentinc/confluent-local:7.4.1
     hostname: broker

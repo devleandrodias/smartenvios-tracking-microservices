@@ -1,0 +1,23 @@
+{
+  "name": "ms.ticket-manager",
+  "version": "1.0.0",
+  "description": "MS Ticket Manager",
+  "main": "./dist/src/index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start:dev": "npx ts-node-dev ./src/server.ts",
+    "start:prod": "npx tsc && node ./dist/src/server.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "nodejs",
+    "jestjs",
+    "typescript",
+    "smartenvios"
+  ],
+  "author": "Leandro Dias",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^5.7.3"
+  }
+}

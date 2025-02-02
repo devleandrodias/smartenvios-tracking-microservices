@@ -7,7 +7,10 @@
     "build": "npx tsc",
     "start:dev": "npx ts-node-dev ./src/server.ts",
     "start:prod": "npx tsc && node ./dist/src/server.js",
-    "test": "jest"
+    "test": "jest",
+    "k6:low": "k6 run ./k6/low-work.js",
+    "k6:hard": "k6 run ./k6/hard-work.js",
+    "k6:medium": "k6 run ./k6/medium-work.js"
   },
   "keywords": [
     "nodejs",
