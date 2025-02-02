@@ -1,73 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { Package, Truck, Home, CheckCircle, ArrowLeft } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
+import { getTrackingEvents } from "@/app/services/tracking.service";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { TrackingEvent } from "@/app/types/tracking";
-import { TrackingStatusBar } from "@/app/components/TrackingStatusBar";
 
 export default function TrackingDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const [events, setEvents] = useState<TrackingEvent[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchTracking = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      // Simulated API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Simulate a random success/error response
-      if (Math.random() > 0.5) {
-        setEvents([
-          {
-            status: "Entrega realizada",
-            date: "2024-02-01 14:30",
-            location: "São Paulo, SP",
-            icon: "check",
-          },
-          {
-            status: "Em rota de entrega",
-            date: "2024-02-01 09:15",
-            location: "São Paulo, SP",
-            icon: "truck",
-          },
-          {
-            status: "Chegou ao centro de distribuição",
-            date: "2024-01-31 18:20",
-            location: "Guarulhos, SP",
-            icon: "home",
-          },
-          {
-            status: "Pedido registrado",
-            date: "2024-01-30 10:00",
-            location: "Curitiba, PR",
-            icon: "package",
-          },
-        ]);
-      } else {
-        setError(
-          "Código de rastreio não encontrado. Verifique se o código está correto e tente novamente."
-        );
-      }
-
-      setIsLoading(false);
-    };
-
-    fetchTracking();
-  }, []);
+  const { isPending, isError, data } = useQuery({
+    retry: 2,
+    queryKey: ["trackingData", params.code],
+    queryFn: async () => {
+      return getTrackingEvents(String(params.code));
+    },
+  });
 
   const getIcon = (iconName: string) => {
     switch (iconName) {
-      case "package":
+      case "ENTREGA REALIZADA":
         return <Package className="w-5 h-5 md:w-6 md:h-6" />;
-      case "truck":
+      case "RECEBIDO NA BASE":
         return <Truck className="w-5 h-5 md:w-6 md:h-6" />;
       case "home":
         return <Home className="w-5 h-5 md:w-6 md:h-6" />;
@@ -95,42 +52,34 @@ export default function TrackingDetailPage() {
           </h1>
         </div>
 
-        {isLoading ? (
+        {isPending ? (
           <div className="text-center py-8">
             <p>Carregando informações...</p>
           </div>
-        ) : error ? (
+        ) : isError ? (
           <Alert
             variant="destructive"
             className="bg-red-900 border-red-800 text-white"
           >
             <AlertTitle>Erro ao rastrear</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription>
+              Não foi possível encontrar seu pedido para código de rastreio{" "}
+              {params.code}
+            </AlertDescription>
           </Alert>
         ) : (
           <>
-            <div className="mb-6 md:mb-8">
-              <TrackingStatusBar
-                currentStatus="delivery"
-                originLocation="Curitiba, PR"
-                destinationLocation="São Paulo, SP"
-                dates={{
-                  pickupDate: "30 Jan 2024",
-                  estimatedDelivery: "02 Fev 2024",
-                }}
-              />
-            </div>
             <div className="space-y-4">
-              {events.map((event, index) => (
-                <div key={index} className="relative">
+              {data.events.map((event) => (
+                <div key={event._id} className="relative">
                   <div className="flex items-start gap-3 md:gap-4">
                     <div className="flex flex-col items-center">
                       <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-violet-600 flex items-center justify-center">
-                        {getIcon(event.icon)}
+                        {getIcon(event.status)}
                       </div>
-                      {index !== events.length - 1 && (
+                      {/* {index !== events.length - 1 && (
                         <div className="w-0.5 h-14 md:h-16 bg-gray-700 mt-2" />
-                      )}
+                      )} */}
                     </div>
                     <div className="flex-1">
                       <h3 className="font-medium text-white text-sm md:text-base">
@@ -140,7 +89,7 @@ export default function TrackingDetailPage() {
                         {event.location}
                       </p>
                       <p className="text-xs md:text-sm text-gray-400">
-                        {event.date}
+                        {event.timestamp}
                       </p>
                     </div>
                   </div>
