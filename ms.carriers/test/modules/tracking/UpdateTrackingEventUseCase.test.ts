@@ -1,7 +1,7 @@
-import { UpdateTrackingEventProducer } from "../../../src/modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.producer";
-import { UpdateTrackingEventUseCase } from "../../../src/modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.useCase";
 import { CarrierServices } from "../../../src/services/carrier.services";
 import { EShippingCompany } from "../../../src/shared/enuns/EShippingCompany";
+import { UpdateTrackingEventProducer } from "../../../src/modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.producer";
+import { UpdateTrackingEventUseCase } from "../../../src/modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.useCase";
 
 describe("Update Tracking Event", () => {
   let updateTrackingEventUseCase: UpdateTrackingEventUseCase;
@@ -74,27 +74,47 @@ describe("Update Tracking Event", () => {
 
     await updateTrackingEventUseCase.execute({
       events: [],
-      shippingCompany: EShippingCompany.CARRIERS,
+      orderId: "9673e0bf-207f-41ee-bd2e-50412c3a3686",
+      carrier: EShippingCompany.CARRIERS,
       trackingCode: "SM82886187440BM",
     });
 
     expect(updateTrackingEventProduceSpy).toHaveBeenCalledWith({
       events: [
-        { observation: "Entregue", status: "ENTREGA REALIZADA" },
-        { observation: "Em rota de entrega", status: "EM ROTA DE ENTREGA" },
-        { observation: "Na filial distribuidora", status: "RECEBIDO NA BASE" },
         {
-          observation: "Em transferência para filial Distribuidora",
+          location: "São Paulo",
+          status: "ENTREGA REALIZADA",
+          timestamp: "30-09-2021 11:16:59",
+        },
+        {
+          location: "São Paulo",
+          status: "EM ROTA DE ENTREGA",
+          timestamp: "30-09-2021 08:04:49",
+        },
+        {
+          location: "São Paulo",
+          status: "RECEBIDO NA BASE",
+          timestamp: "30-09-2021 07:03:17",
+        },
+        {
+          location: "São Paulo",
           status: "EM TRANSFERÊNCIA PARA A BASE",
+          timestamp: "30-09-2021 04:19:59",
         },
         {
-          observation: "Em transferência para filial Distribuidora",
+          location: "São Paulo",
           status: "EM TRANSFERÊNCIA PARA O HUB",
+          timestamp: "29-09-2021 12:03:38",
         },
-        { observation: "Recebido no CD da transportadora", status: "COLETADO" },
+        {
+          location: "São Paulo",
+          status: "COLETADO",
+          timestamp: "29-09-2021 11:46:19",
+        },
       ],
-      shippingCompany: "Carriers",
+      carrier: "Carriers",
       trackingCode: "SM82886187440BM",
+      orderId: "9673e0bf-207f-41ee-bd2e-50412c3a3686",
     });
   });
 });

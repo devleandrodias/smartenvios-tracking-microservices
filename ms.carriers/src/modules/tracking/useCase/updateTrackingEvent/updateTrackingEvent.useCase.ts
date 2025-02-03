@@ -27,7 +27,7 @@ export class UpdateTrackingEventUseCase {
 
       const events: TrackingEvent[] = tracking.Eventos.map((evento) => ({
         location: "São Paulo",
-        timestamp: new Date().toString(),
+        timestamp: evento.Data,
         status: evento.Status as ESmartEnviosStatus,
       }));
 

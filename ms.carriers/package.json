@@ -20,6 +20,7 @@
   "dependencies": {
     "@kafkajs/confluent-schema-registry": "^3.6.1",
     "axios": "^1.7.9",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "env-var": "^7.5.0",
     "express": "^4.21.2",

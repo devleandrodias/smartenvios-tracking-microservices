@@ -1,15 +1,19 @@
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 
 import { ITracking } from "../../entities/ITracking";
 import { IGetTrackingByCodeInput } from "./getTrackingByCode.dtos";
-import { TrackingRepository } from "../../infra/mongoose/repositories/tracking.repository";
+import { ITrackingRepository } from "../../repositories/ITrackingRepository";
 
 @injectable()
 export class GetTrackingByCodeUseCase {
-  async execute(input: IGetTrackingByCodeInput): Promise<ITracking> {
-    const repository = new TrackingRepository();
+  constructor(
+    @inject("TrackingRepository") private repository: ITrackingRepository
+  ) {}
 
-    const tracking = await repository.getTrackingByCode(input.trackingCode);
+  async execute(input: IGetTrackingByCodeInput): Promise<ITracking> {
+    const tracking = await this.repository.getTrackingByCode(
+      input.trackingCode
+    );
 
     if (!tracking) {
       throw new Error("Tracking not found!");

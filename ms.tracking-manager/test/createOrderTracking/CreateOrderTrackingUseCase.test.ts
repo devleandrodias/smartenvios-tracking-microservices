@@ -1,18 +1,26 @@
+import "reflect-metadata";
+
 import { EShippingCompany } from "../../src/shared/enuns/EShippingCompany";
-import { TrackingRepository } from "../../src/modules/tracking/infra/mongoose/repositories/tracking.repository";
+import { ITrackingRepository } from "../../src/modules/tracking/repositories/ITrackingRepository";
+import { TrackingRepositoryInMemory } from "../../src/modules/tracking/infra/inMemory/repositories/tracking.repository";
 import { CreateOrderTrackingUseCase } from "../../src/modules/tracking/useCase/createOrderTracking/createOrderTracking.useCase";
 import { ICreateOrderTrackingInput } from "../../src/modules/tracking/useCase/createOrderTracking/createOrderTracking.interfaces";
 
 describe("[CreateOrderTrackingUseCase]", () => {
+  let trackingRepository: ITrackingRepository;
   let createOrderTrackingUseCase: CreateOrderTrackingUseCase;
 
   let saveOrderTrackingSpy: jest.SpyInstance;
 
   beforeAll(() => {
-    createOrderTrackingUseCase = new CreateOrderTrackingUseCase();
+    trackingRepository = new TrackingRepositoryInMemory();
+
+    createOrderTrackingUseCase = new CreateOrderTrackingUseCase(
+      trackingRepository
+    );
 
     saveOrderTrackingSpy = jest.spyOn(
-      TrackingRepository.prototype,
+      TrackingRepositoryInMemory.prototype,
       "saveOrderTracking"
     );
   });
@@ -22,7 +30,7 @@ describe("[CreateOrderTrackingUseCase]", () => {
 
     const input: ICreateOrderTrackingInput = {
       orderId: "ac9906a8-1913-4486-a45d-af92614e72e4",
-      shippingCompany: EShippingCompany.CARRIERS,
+      carrier: EShippingCompany.CARRIERS,
       trackingCode: "SM82886187440BM",
     };
 
@@ -30,8 +38,8 @@ describe("[CreateOrderTrackingUseCase]", () => {
 
     expect(saveOrderTrackingSpy).toHaveBeenCalledWith({
       orderId: input.orderId,
+      carrier: input.carrier,
       trackingCode: input.trackingCode,
-      shippingCompany: input.shippingCompany,
     });
   });
 });

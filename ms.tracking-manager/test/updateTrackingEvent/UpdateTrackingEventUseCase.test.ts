@@ -1,17 +1,26 @@
+import "reflect-metadata";
+
 import { EShippingCompany } from "../../src/shared/enuns/EShippingCompany";
 import { ESmartEnviosStatus } from "../../src/shared/enuns/ESmartEnviosStatus";
-import { TrackingRepository } from "../../src/modules/tracking/infra/mongoose/repositories/tracking.repository";
+import { ITrackingRepository } from "../../src/modules/tracking/repositories/ITrackingRepository";
+import { TrackingRepositoryInMemory } from "../../src/modules/tracking/infra/inMemory/repositories/tracking.repository";
 import { IUpdateTrackingEventInput } from "../../src/modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.interfaces";
 import { UpdateTrackingEventUseCase } from "../../src/modules/tracking/useCase/updateTrackingEvent/updateTrackingEvent.useCase";
 
 describe("[UpdateTrackingEventUseCase]", () => {
+  let trackingRepository: ITrackingRepository;
   let updateTrackingEventUseCase: UpdateTrackingEventUseCase;
   let addTrackingEventSpy: jest.SpyInstance;
 
   beforeAll(() => {
-    updateTrackingEventUseCase = new UpdateTrackingEventUseCase();
+    trackingRepository = new TrackingRepositoryInMemory();
+
+    updateTrackingEventUseCase = new UpdateTrackingEventUseCase(
+      trackingRepository
+    );
+
     addTrackingEventSpy = jest.spyOn(
-      TrackingRepository.prototype,
+      TrackingRepositoryInMemory.prototype,
       "addTrackingEvent"
     );
   });
@@ -21,12 +30,12 @@ describe("[UpdateTrackingEventUseCase]", () => {
 
     const input: IUpdateTrackingEventInput = {
       trackingCode: "SM82886187440BM",
-      shippingCompany: EShippingCompany.CARRIERS,
+      carrier: EShippingCompany.CARRIERS,
       events: [
         {
-          observation: "Coletado no CD",
+          location: "São Paulo",
           status: ESmartEnviosStatus.COLETADO,
-          trackingId: "3d2bcadc-e706-47c0-aa64-92d356c5efee",
+          timestamp: new Date().toISOString(),
         },
       ],
     };

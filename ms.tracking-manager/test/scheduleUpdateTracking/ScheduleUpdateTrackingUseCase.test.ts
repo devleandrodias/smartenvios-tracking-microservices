@@ -1,15 +1,20 @@
+import "reflect-metadata";
+
 import { SchemaType } from "@kafkajs/confluent-schema-registry";
+
 import { producer } from "../../src/shared/lib/kafka/kafka";
-import { registry } from "../../src/shared/lib/kafka/schemaRegistry";
-import { TrackingRepository } from "../../src/modules/tracking/infra/mongoose/repositories/tracking.repository";
-import { ScheduleUpdateTrackingsUseCase } from "../../src/modules/tracking/useCase/scheduleUpdateTrackings/scheduleUpdateTrackings.useCase";
-import { trackingSchema } from "../../src/shared/schemas/TrackingSchema";
 import { EKafkaTopics } from "../../src/shared/enuns/EKafkaTopics";
+import { registry } from "../../src/shared/lib/kafka/schemaRegistry";
+import { trackingSchema } from "../../src/shared/schemas/TrackingSchema";
 import { ITracking } from "../../src/modules/tracking/entities/ITracking";
 import { EShippingCompany } from "../../src/shared/enuns/EShippingCompany";
 import { ESmartEnviosStatus } from "../../src/shared/enuns/ESmartEnviosStatus";
+import { ITrackingRepository } from "../../src/modules/tracking/repositories/ITrackingRepository";
+import { TrackingRepositoryInMemory } from "../../src/modules/tracking/infra/inMemory/repositories/tracking.repository";
+import { ScheduleUpdateTrackingsUseCase } from "../../src/modules/tracking/useCase/scheduleUpdateTrackings/scheduleUpdateTrackings.useCase";
 
 describe("[ScheduleUpdateTrackingsUseCase]", () => {
+  let trackingRepository: ITrackingRepository;
   let scheduleUpdateTrackingsUseCase: ScheduleUpdateTrackingsUseCase;
 
   let registerSpy: jest.SpyInstance;
@@ -20,14 +25,19 @@ describe("[ScheduleUpdateTrackingsUseCase]", () => {
   let getTrackingNeedUpdateSpy: jest.SpyInstance;
 
   beforeAll(() => {
-    scheduleUpdateTrackingsUseCase = new ScheduleUpdateTrackingsUseCase();
+    trackingRepository = new TrackingRepositoryInMemory();
+
+    scheduleUpdateTrackingsUseCase = new ScheduleUpdateTrackingsUseCase(
+      trackingRepository
+    );
+
     registerSpy = jest.spyOn(registry, "register");
     encodeSpy = jest.spyOn(registry, "encode");
     producerSendSpy = jest.spyOn(producer, "send");
     producerConnectSpy = jest.spyOn(producer, "connect");
     producerDisconnectSpy = jest.spyOn(producer, "disconnect");
     getTrackingNeedUpdateSpy = jest.spyOn(
-      TrackingRepository.prototype,
+      TrackingRepositoryInMemory.prototype,
       "getTrackingNeedUpdate"
     );
   });
@@ -43,18 +53,17 @@ describe("[ScheduleUpdateTrackingsUseCase]", () => {
     producerDisconnectSpy.mockResolvedValue(null);
 
     const trackingNeedUpdate: ITracking = {
-      id: "9673e0bf-207f-41ee-bd2e-50412c3a3686",
       orderId: "59506fed-2ea3-40dd-9c1f-d2b7edeedda6",
-      shippingCompany: EShippingCompany.CARRIERS,
+      carrier: EShippingCompany.CARRIERS,
       trackingCode: "SM82886187440BM",
       events: [
         {
-          observation: "Coletado no CD",
+          location: "São Paulo",
           status: ESmartEnviosStatus.COLETADO,
-          trackingId: "5af62b47-6369-42e2-b80e-deaedb8dedc0",
+          timestamp: "2025-01-01",
         },
       ],
-    };
+    } as ITracking;
 
     getTrackingNeedUpdateSpy.mockResolvedValue([trackingNeedUpdate]);
 
@@ -66,12 +75,14 @@ describe("[ScheduleUpdateTrackingsUseCase]", () => {
     });
 
     expect(encodeSpy).toHaveBeenCalledWith(registerId, {
+      orderId: trackingNeedUpdate.orderId,
+      carrier: trackingNeedUpdate.carrier,
       trackingCode: trackingNeedUpdate.trackingCode,
-      shippingCompany: trackingNeedUpdate.shippingCompany,
       events: [
         {
-          observation: "Coletado no CD",
+          location: "São Paulo",
           status: ESmartEnviosStatus.COLETADO,
+          timestamp: "2025-01-01",
         },
       ],
     });
