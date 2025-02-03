@@ -1,3 +1,4 @@
+import { format, parse } from "date-fns";
 import { CarrierServices } from "../../../../services/carrier.services";
 import { UpdateTrackingEventProducer } from "./updateTrackingEvent.producer";
 import { EShippingCompany } from "../../../../shared/enuns/EShippingCompany";
@@ -25,11 +26,18 @@ export class UpdateTrackingEventUseCase {
         trackingCode,
       });
 
-      const events: TrackingEvent[] = tracking.Eventos.map((evento) => ({
-        location: "São Paulo",
-        timestamp: evento.Data,
-        status: evento.Status as ESmartEnviosStatus,
-      }));
+      const events: TrackingEvent[] = tracking.Eventos.map((evento) => {
+        const referenceDate = new Date();
+        const formatString = "dd-MM-yyyy HH:mm:ss";
+        const parsedDate = parse(evento.Data, formatString, referenceDate);
+        const isoString = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss");
+
+        return {
+          location: "São Paulo",
+          timestamp: isoString,
+          status: evento.Status as ESmartEnviosStatus,
+        };
+      });
 
       const message: TrackingSchema = {
         events,

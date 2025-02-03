@@ -84,32 +84,32 @@ describe("Update Tracking Event", () => {
         {
           location: "São Paulo",
           status: "ENTREGA REALIZADA",
-          timestamp: "30-09-2021 11:16:59",
+          timestamp: "2021-09-30T11:16:59",
         },
         {
           location: "São Paulo",
           status: "EM ROTA DE ENTREGA",
-          timestamp: "30-09-2021 08:04:49",
+          timestamp: "2021-09-30T08:04:49",
         },
         {
           location: "São Paulo",
           status: "RECEBIDO NA BASE",
-          timestamp: "30-09-2021 07:03:17",
+          timestamp: "2021-09-30T07:03:17",
         },
         {
           location: "São Paulo",
           status: "EM TRANSFERÊNCIA PARA A BASE",
-          timestamp: "30-09-2021 04:19:59",
+          timestamp: "2021-09-30T04:19:59",
         },
         {
           location: "São Paulo",
           status: "EM TRANSFERÊNCIA PARA O HUB",
-          timestamp: "29-09-2021 12:03:38",
+          timestamp: "2021-09-29T12:03:38",
         },
         {
           location: "São Paulo",
           status: "COLETADO",
-          timestamp: "29-09-2021 11:46:19",
+          timestamp: "2021-09-29T11:46:19",
         },
       ],
       carrier: "Carriers",
